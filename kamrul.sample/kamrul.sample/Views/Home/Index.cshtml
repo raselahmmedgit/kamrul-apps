@@ -1,0 +1,103 @@
+﻿@model kamrul.sample.Models.Category
+@{
+    ViewBag.Title = "Home Page";
+}
+<div id="formSubmitZone">
+    @using (Ajax.BeginForm("Save", "Home", null,
+                                         new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "updateTargetId",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 HttpMethod = "POST",
+                                                 OnBegin = "OnBegin",
+                                                 OnSuccess = "OnSuccess",
+                                                 OnComplete = "OnComplete",
+                                             }, new { @id = "appSubmitForm" }))
+    {
+        <fieldset>
+            <legend>Category:</legend>
+            @Html.ValidationSummary(true)
+            <div id="updateTargetId" class="error invisible">
+            </div>
+            <div class="editor-field">
+                <strong>@Html.LabelFor(model => model.Name)</strong>
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+            <div class="editor-field">
+                <button type="submit" id="btnSubmit" name="btnSubmit">
+                    Submit</button>
+                <button type="button" id="btnSave" name="btnSubmit">
+                    Save</button>
+            </div>
+        </fieldset>
+    }
+</div>
+<br/>
+<hr />
+<div id="jqGridZone">
+    <div id="jqSearch">
+    </div>
+    <table id="jqGrid" cellpadding="0" cellspacing="0">
+    </table>
+    <div id="jqGridPager" style="text-align: center;">
+    </div>
+</div>
+<style type="text/css">
+    .progess-bar
+    {
+        width: 45px !important;
+        min-width: 45px !important;
+        height: 45px !important;
+        min-height: 45px !important;
+    }
+</style>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        //-----------------------------------------------------
+        //Save
+        $('#btnSave').live('click', function () {
+
+            //appSubmitForm
+            //$("#appSubmitForm").validate();
+            var isValid = $("#appSubmitForm").valid();
+            
+            console.log(isValid);
+            console.log('btnSave');
+
+        });
+        //-----------------------------------------------------
+
+        $('#jqGrid').jqGrid({
+            url: '@Url.Action("GetProductList", "Home")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Product Id', 'Product Name', 'Product Price', 'Action'],
+            colModel: [
+                    { name: 'ProductId', index: 'ProductId', align: 'left', search: false, hidden: true },
+                    { name: 'Name', index: 'Name', width: '80px', align: 'left', search: true, hidden: false },
+                    { name: 'Price', index: 'Price', align: 'left', search: true, hidden: false },
+                    { name: 'Details', index: 'Details', align: 'left', search: false, hidden: false, sortable: false }
+            ],
+            autowidth: true,
+            caption: "Product List",
+            rowNum: 10,
+            rowList: [10, 20, 30, 40, 50, 100],
+            pager: $('#jqGridPager'),
+            sortname: 'id',
+            sortorder: 'asc',
+            viewrecords: true,
+            multiselect: false,
+            height: '100%',
+            width: '50%'
+
+        });
+        
+        //Pager Function
+        //$("#jqSearch").jqGrid('filterGrid', '#jqGrid', { gridModel: true, gridNames: true, formtype: 'horizontal', autosearch: false, enableSearch: true, enableClear: true });
+
+    });
+
+</script>

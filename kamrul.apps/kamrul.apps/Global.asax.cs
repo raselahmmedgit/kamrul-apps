@@ -20,7 +20,7 @@ namespace kamrul.apps
         {
             AreaRegistration.RegisterAllAreas();
 
-            InitializeAndSeedDb();
+            //InitializeAndSeedDb();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

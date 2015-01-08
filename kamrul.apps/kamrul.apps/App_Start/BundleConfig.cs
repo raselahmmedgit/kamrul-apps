@@ -23,8 +23,11 @@ namespace kamrul.apps
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqGrid").Include(
+            bundles.Add(new ScriptBundle("~/bundles/jqGrid/js").Include(
                         "~/Scripts/jquery.jqGrid.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/app/js").Include(
+                        "~/Scripts/app.jq.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
 

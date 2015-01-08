@@ -1,4 +1,5 @@
-﻿@{
+﻿@model kamrul.apps.Models.Category
+@{
     ViewBag.Title = "Home Page";
 }
 @section featured {
@@ -11,6 +12,128 @@
         </div>
     </section>
 }
-<h3>We suggest the following:</h3>
-<div>
+
+<div id="formSubmitZone">
+    @using (Ajax.BeginForm("Save", "Home", null,
+        new AjaxOptions
+        {
+            UpdateTargetId = "updateTargetId",
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnBegin = "OnBegin",
+            OnSuccess = "OnSuccess",
+            OnComplete = "OnComplete",
+        }, new { @id = "appSubmitForm" }))
+    {
+        <fieldset>
+            <legend>Category:</legend>
+            @Html.ValidationSummary(true)
+            <div id="updateTargetId" class="error invisible">
+            </div>
+            <div class="editor-field">
+                <strong>@Html.LabelFor(model => model.Name)</strong>
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+            <div class="editor-field">
+                <button type="submit" id="btnSubmit" name="btnSubmit">Submit</button>
+            </div>
+        </fieldset>
+    }
 </div>
+<div id="jqGridZone">
+    <div id="jqSearch">
+    </div>
+    <table id="jqGrid" cellpadding="0" cellspacing="0"></table>
+    <div id="jqGridPager" style="text-align: center;">
+    </div>
+</div>
+<hr />
+<div id="jqCatGridZone">
+    <div id="jqCatSearch">
+    </div>
+    <table id="jqCatGrid" cellpadding="0" cellspacing="0"></table>
+    <div id="jqCatGridPager" style="text-align: center;">
+    </div>
+</div>
+<style type="text/css">
+    .progess-bar {
+    }
+</style>
+
+<script type="text/javascript">
+
+    @*$(document).ready(function () {
+
+        $('#jqGrid').jqGrid({
+            url: '@Url.Action("GetProductList", "Home")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['ProductId', 'Name', 'Price'],
+            colModel: [
+                    { name: 'ProductId', index: 'ProductId', align: 'left', search: false, hidden: true },
+                    { name: 'Name', index: 'Name', width: '80px', align: 'left', search: true, hidden: false },
+                    { name: 'Price', index: 'Price', align: 'left', search: true, hidden: false },
+                    { name: 'ProductId', index: 'ProductId', align: 'left', search: false, hidden: false, formatter: viewformatEdiorLink }
+            ],
+            autowidth: true,
+            caption: "Product List",
+            rowList: [20, 30, 40, 50, 100],
+            pager: $('#jqGridPager'),
+            rowNum: 20,
+            sortname: 'ProductId',
+            sortorder: 'asc',
+            viewrecords: true,
+            height: '100%',
+            width: '50%'
+
+        });
+        // Pager Function
+        $("#jqSearch").jqGrid('filterGrid', '#jqGrid', { gridModel: true, gridNames: true, formtype: 'horizontal', autosearch: false, enableSearch: true, enableClear: true });
+
+    });*@
+
+    function viewformatEdiorLink(cellvalue, options, rowObject) {
+        var url = '@Html.ActionLink("_name_", "Details", new { id = "_id_" })';
+        url = url.replace(/_name_/, cellvalue);
+        url = url.replace(/_id_/, rowObject[0]);
+        return url;
+    }
+
+    $(function () {
+
+        //$("#jqCatGrid").jqGrid({
+        //    url: "/Home/GetCategoryList",
+        //    datatype: "json",
+        //    mtype: 'POST',
+        //    colNames: ['CategoryId',
+        //              'CategoryId',
+        //              'Name',
+        //             'Details', 'Edit', 'Delete'],
+        //    colModel: [
+        //        { name: 'CategoryId', index: 'CategoryId', key: true, width: 0, hidden: true },
+        //        { name: 'CategoryId', index: 'CategoryId', width: 0, align: 'left', hidden: true },
+        //        { name: 'Name', index: 'Name', width: 250, align: 'left', hidden: false },
+        //        { name: 'Details', index: 'Details', width: 100, align: 'center' },
+        //        { name: 'Edit', index: 'Edit', width: 100, align: 'center' },
+        //        { name: 'Delete', index: 'Delete', width: 100, align: 'center' }
+        //    ],
+        //    rowNum: 10,                                //default page size
+        //    rowList: [10, 20, 30, 40, 50],                 //option of page size
+        //    caption: "Category List",
+        //    rowList: [20, 30, 40, 50, 100],
+        //    pager: $('#jqCatGridPager'),
+        //    height: "100%",                          //grid height
+        //    width: "100%",                          //grid width
+        //    sortname: 'id',                     //default sort column name
+        //    sortorder: "desc",                       //sorting order
+        //    viewrecords: true,                         //by default records show?
+        //    multiselect: false                        //checkbox list
+
+        //});
+        //// Pager Function
+        //$("#jqCatSearch").jqGrid('filterGrid', '#jqCatGrid', { gridModel: true, gridNames: true, formtype: 'horizontal', autosearch: false, enableSearch: true, enableClear: true });
+
+    })
+
+</script>
